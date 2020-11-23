@@ -38,7 +38,7 @@ class GithubRepository(
 
         // Get data source factory from the local cache
 //        val dataSourceFactory = cache.reposByName(query)
-        val dataSourceFactory = RepoDataSourceFactory(cache, query)
+        val dataSourceFactory = RepoDataSourceFactory(cache, query, RepoDataSourceFactory.Type.RepoKey)
 
         // every new query creates a new BoundaryCallback
         // The BoundaryCallback will observe when the user reaches to the edges of

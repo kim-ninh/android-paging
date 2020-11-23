@@ -35,8 +35,7 @@ interface RepoDao {
     // Do a similar query as the search API:
     // Look for repos that contain the query string in the name or in the description
     // and order those results descending, by the number of stars and then by name
-    @Query("SELECT * FROM repos WHERE (name LIKE :queryString) OR (description LIKE " +
-            ":queryString) ORDER BY stars DESC, name ASC")
+    @Query("SELECT * FROM repos WHERE (name LIKE :queryString) OR (description LIKE :queryString) ORDER BY stars DESC, name ASC")
     fun reposByName(queryString: String): DataSource.Factory<Int,Repo>
 
     @Query("SELECT * FROM repos WHERE (name LIKE :queryString) OR (description LIKE :queryString) ORDER BY stars DESC LIMIT :pageSize")
@@ -44,4 +43,10 @@ interface RepoDao {
 
     @Query("SELECT * FROM repos WHERE ((name LIKE :queryString) OR (description LIKE :queryString)) AND (stars < :lastStar) ORDER BY stars DESC LIMIT :pageSize")
     fun reposByName(queryString: String, pageSize: Int, lastStar: Int): List<Repo>
+
+    @Query("SELECT * FROM (SELECT * FROM repos WHERE (name LIKE :queryString) OR (description LIKE :queryString) ORDER BY stars DESC) LIMIT :limit OFFSET :offset")
+    fun reposByName_(queryString: String, limit: Int, offset: Int): List<Repo>
+
+    @Query("SELECT COUNT(*) FROM (SELECT * FROM repos WHERE (name LIKE :queryString) OR (description LIKE :queryString) ORDER BY stars DESC)")
+    fun countRepos(queryString: String): Int
 }

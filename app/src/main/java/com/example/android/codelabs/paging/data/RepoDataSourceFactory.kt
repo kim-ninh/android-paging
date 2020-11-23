@@ -9,15 +9,25 @@ import com.example.android.codelabs.paging.model.Repo
 
 class RepoDataSourceFactory(
         private val cache: GithubLocalCache,
-        private val name: String
+        private val name: String,
+        private val type: Type = Type.LimitOffset
 ): DataSource.Factory<Int, Repo>() {
 
     private val _dataSourceLiveData = MutableLiveData<DataSource<Int, Repo>>()
     val dataSourceLiveData: LiveData<DataSource<Int, Repo>> = _dataSourceLiveData
 
     override fun create(): DataSource<Int, Repo> {
-        val dataSource = RepoKeyedDataSource(cache, name)
+
+        val dataSource = when(type){
+            Type.RepoKey -> RepoKeyedDataSource(cache, name)
+            Type.LimitOffset -> RepoOffsetLimitDataSource(cache, name)
+        }
+
         _dataSourceLiveData.postValue(dataSource)
         return dataSource
+    }
+
+    enum class Type{
+        LimitOffset, RepoKey
     }
 }

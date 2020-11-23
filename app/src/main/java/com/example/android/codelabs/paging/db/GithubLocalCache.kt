@@ -62,4 +62,14 @@ class GithubLocalCache(
         val query = "%${name.replace(' ', '%')}%"
         return repoDao.reposByName(query, pageSize, lastStar)
     }
+
+    fun reposByName_(name: String, limit: Int, offset: Int): List<Repo>{
+        val query = "%${name.replace(' ', '%')}%"
+        return repoDao.reposByName_(query, limit, offset)
+    }
+
+    fun countRepos(name: String): Int{
+        val query = "%${name.replace(' ', '%')}%"
+        return repoDao.countRepos(query)
+    }
 }
