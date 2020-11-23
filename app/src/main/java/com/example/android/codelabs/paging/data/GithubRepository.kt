@@ -37,12 +37,13 @@ class GithubRepository(
         Log.d("GithubRepository", "New query: $query")
 
         // Get data source factory from the local cache
-        val dataSourceFactory = cache.reposByName(query)
+//        val dataSourceFactory = cache.reposByName(query)
+        val dataSourceFactory = RepoDataSourceFactory(cache, query)
 
         // every new query creates a new BoundaryCallback
         // The BoundaryCallback will observe when the user reaches to the edges of
         // the list and update the database with extra data
-        val boundaryCallback = RepoBoundaryCallback(query, service, cache)
+        val boundaryCallback = RepoBoundaryCallback(query, service, cache, dataSourceFactory)
         val networkErrors = boundaryCallback.networkErrors
 
         // Get the paged list

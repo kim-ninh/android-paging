@@ -63,7 +63,7 @@ class SearchRepositoriesActivity : AppCompatActivity() {
     private fun initAdapter() {
         list.adapter = adapter
         viewModel.repos.observe(this, Observer<PagedList<Repo>> {
-            Log.d("Activity", "list: ${it?.size}")
+            Log.d("SearchRepositories", "list: ${it?.size}")
             showEmptyList(it?.size == 0)
             adapter.submitList(it)
         })

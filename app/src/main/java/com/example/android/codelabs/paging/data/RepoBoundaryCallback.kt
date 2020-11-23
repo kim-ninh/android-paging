@@ -32,7 +32,8 @@ import com.example.android.codelabs.paging.model.Repo
 class RepoBoundaryCallback(
         private val query: String,
         private val service: GithubService,
-        private val cache: GithubLocalCache
+        private val cache: GithubLocalCache,
+        private val dataSourceFactory: RepoDataSourceFactory
 ) : PagedList.BoundaryCallback<Repo>() {
 
     companion object {
@@ -74,6 +75,7 @@ class RepoBoundaryCallback(
             cache.insert(repos) {
                 lastRequestedPage++
                 isRequestInProgress = false
+                dataSourceFactory.dataSourceLiveData.value?.invalidate()
             }
         }, { error ->
             _networkErrors.postValue(error)

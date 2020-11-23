@@ -38,4 +38,10 @@ interface RepoDao {
     @Query("SELECT * FROM repos WHERE (name LIKE :queryString) OR (description LIKE " +
             ":queryString) ORDER BY stars DESC, name ASC")
     fun reposByName(queryString: String): DataSource.Factory<Int,Repo>
+
+    @Query("SELECT * FROM repos WHERE (name LIKE :queryString) OR (description LIKE :queryString) ORDER BY stars DESC LIMIT :pageSize")
+    fun reposByName(queryString: String, pageSize: Int): List<Repo>
+
+    @Query("SELECT * FROM repos WHERE ((name LIKE :queryString) OR (description LIKE :queryString)) AND (stars < :lastStar) ORDER BY stars DESC LIMIT :pageSize")
+    fun reposByName(queryString: String, pageSize: Int, lastStar: Int): List<Repo>
 }
